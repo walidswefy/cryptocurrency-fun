@@ -44,11 +44,6 @@ public class IntegrityChecker {
         }
 
         List<Transaction> transactions = block.getTransactions();
-        if (lastBlockHash == null) {
-            // genesis block
-            return transactions.size() == 0;
-        }
-
         boolean validCoinBaseTransaction = transactions.get(0).isCoinbase() &&
             transactions.stream().filter(Transaction::isCoinbase).count() == 1;
         if (!validCoinBaseTransaction) {

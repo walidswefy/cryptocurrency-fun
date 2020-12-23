@@ -1,4 +1,4 @@
-package com.example.blockchain.bitcoin.security;
+package com.example.blockchain.bitcoin.distributed;
 
 import com.example.blockchain.bitcoin.model.Block;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
-package com.example.blockchain.bitcoin.pubsub;
+package com.example.blockchain.bitcoin.distributed;
 
 import com.example.blockchain.bitcoin.model.Block;
-import com.example.blockchain.bitcoin.security.BlockChain;
 import com.example.blockchain.bitcoin.security.Miner;
 import com.example.blockchain.bitcoin.stats.NetworkPerformance;
 import com.hazelcast.core.HazelcastInstance;
@@ -22,14 +21,13 @@ import javax.annotation.PostConstruct;
 public class BlockSubscriber {
     private final HazelcastInstance instance;
     private final Miner miner;
-    private final BlockChain blockChain;
+    private final DistributedChain blockChain;
     private final NetworkPerformance networkPerformance;
 
     @PostConstruct
     public void init() {
         ITopic<Block> confirmedBlockTopic = instance.getTopic("confirmedBlock");
         confirmedBlockTopic.addMessageListener(m -> {
-            blockChain.onConfirmedBlock(m.getMessageObject());
             miner.onConfirmedBlock(m.getMessageObject());
             networkPerformance.onCompletedBlock(m.getMessageObject());
         });

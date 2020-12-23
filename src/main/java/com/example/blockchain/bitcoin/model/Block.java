@@ -1,8 +1,6 @@
 package com.example.blockchain.bitcoin.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
-import lombok.SneakyThrows;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,7 +20,7 @@ public class Block implements Serializable {
     private long timeStamp;
     private String hash;
     private int nonce;
-    private boolean startMining;
+    private boolean doMining;
 
     public Block(String previousHash, List<Transaction> transactions, int complexity) {
         this.prefixString = new String(new char[complexity]).replace('\0', '0');
@@ -32,10 +30,10 @@ public class Block implements Serializable {
     }
 
     public void mineBlock() {
-        startMining = true;
+        doMining = true;
         timeStamp = System.currentTimeMillis();
         hash = calculateBlockHash(this);
-        while (startMining && !challengeSolved()) {
+        while (doMining && !challengeSolved()) {
             timeStamp = System.currentTimeMillis();
             nonce++;
             hash = calculateBlockHash(this);
@@ -43,7 +41,7 @@ public class Block implements Serializable {
     }
 
     public void stopMining() {
-        startMining = false;
+        doMining = false;
     }
 
     public boolean challengeSolved() {
@@ -57,10 +55,5 @@ public class Block implements Serializable {
             ", hash='" + hash + '\'' +
             ", transactions=" + transactions +
             '}';
-    }
-
-    @SneakyThrows
-    public String asJson() {
-        return new ObjectMapper().writeValueAsString(this);
     }
 }

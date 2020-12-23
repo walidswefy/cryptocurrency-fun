@@ -1,5 +1,6 @@
 package com.example.blockchain.bitcoin.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -7,7 +8,8 @@ import java.math.MathContext;
  * @author walid.sewaify
  * @since 18-Dec-20
  */
-public class Satoshi {
+public class Satoshi implements Serializable {
+    //todo
     private static final BigDecimal BITCOIN = BigDecimal.valueOf(100000000);
 
     private final long value;

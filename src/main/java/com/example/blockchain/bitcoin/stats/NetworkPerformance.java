@@ -1,11 +1,11 @@
 package com.example.blockchain.bitcoin.stats;
 
+import com.example.blockchain.bitcoin.distributed.DistributedChain;
 import com.example.blockchain.bitcoin.model.Block;
 import com.example.blockchain.bitcoin.model.Transaction;
-import com.example.blockchain.bitcoin.security.BlockChain;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -24,18 +23,18 @@ import java.util.stream.Collectors;
 @Data
 @Slf4j
 @Profile("miner")
+@RequiredArgsConstructor
 public class NetworkPerformance {
-    long countOfUnconfirmedTransactions;
-    long countOfConfirmedTransactions;
-    long countOfReceivedTransactions;
-    long totalTimeToConfirmation;
-    long numberOfBlocks;
-    long fastestTimeToConfirmation = Long.MAX_VALUE;
-    long slowestTimeToConfirmation = Long.MIN_VALUE;
-    long averageTimeOfConfirmation;
+    private final DistributedChain blockChain;
 
-    @Autowired
-    BlockChain blockChain;
+    private long countOfUnconfirmedTransactions;
+    private long countOfConfirmedTransactions;
+    private long countOfReceivedTransactions;
+    private long totalTimeToConfirmation;
+    private long numberOfBlocks;
+    private long fastestTimeToConfirmation = Long.MAX_VALUE;
+    private long slowestTimeToConfirmation = Long.MIN_VALUE;
+    private long averageTimeOfConfirmation;
 
     public void onCompletedBlock(Block block) {
         numberOfBlocks++;

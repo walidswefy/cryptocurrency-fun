@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
  * @since 29-Nov-20
  */
 @Configuration
-public class HazelCastCofig {
+public class HazelCastConfig {
     @Bean
-    public Config hazelCastConfig() {
+    public Config hzConfig() {
         MapConfig mapConfig = new MapConfig().setName("noExpiryCache").setTimeToLiveSeconds(-1);
         Config config = new Config();
         config.setInstanceName("cacheInstance").addMapConfig(mapConfig);

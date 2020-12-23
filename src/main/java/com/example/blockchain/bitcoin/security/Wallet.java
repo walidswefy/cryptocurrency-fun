@@ -1,7 +1,7 @@
 package com.example.blockchain.bitcoin.security;
 
 import com.example.blockchain.bitcoin.model.Transaction;
-import com.example.blockchain.bitcoin.pubsub.TransactionPublisher;
+import com.example.blockchain.bitcoin.distributed.TransactionPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -54,7 +54,6 @@ public class Wallet {
     protected final String signTransaction(String transactionAsText) {
         return encryptText(transactionAsText, pair.getPrivate());
     }
-
 
     public PublicKey getPublicKey() {
         return pair.getPublic();

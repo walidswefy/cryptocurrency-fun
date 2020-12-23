@@ -1,13 +1,15 @@
 package com.example.blockchain.bitcoin.security;
 
+import com.example.blockchain.bitcoin.distributed.BlockPublisher;
+import com.example.blockchain.bitcoin.distributed.DistributedChain;
 import com.example.blockchain.bitcoin.model.Block;
 import com.example.blockchain.bitcoin.model.Transaction;
-import com.example.blockchain.bitcoin.pubsub.BlockPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,9 +30,17 @@ import static java.util.concurrent.CompletableFuture.runAsync;
 public class Miner {
     private final MinerWallet minerWallet;
     private final BlockPublisher blockPublisher;
+    private final DistributedChain blockChain;
     // unconfirmed transactions
     List<Transaction> transactions = new ArrayList<>();
     private Block blockInMining;
+
+    @PostConstruct
+    public void mineGenesis() {
+        if (blockChain.getBlockChain().isEmpty()) {
+            runAsync(() -> doMining("0", transactions));
+        }
+    }
 
     public void onTransaction(Transaction transaction) {
         log.info("received transaction: {}", transaction);
@@ -38,7 +48,7 @@ public class Miner {
         if (verifyTransaction(transaction)) {
             transactions.add(transaction);
             if (blockInMining != null) {
-                runAsync(() -> doMining(blockInMining.getPreviousHash(), new ArrayList<>(transactions), 4));
+                runAsync(() -> doMining(blockInMining.getPreviousHash(), transactions));
             }
         }
     }
@@ -51,23 +61,23 @@ public class Miner {
         transactions = transactions.stream().filter(t -> !confirmedTransactions.contains(t.getSignature()))
             .collect(Collectors.toList());
 
-        runAsync(() -> doMining(block.getHash(), transactions, 4));  // todo
+        runAsync(() -> doMining(block.getHash(), transactions));
     }
 
-    private void doMining(String previousHash, List<Transaction> transactions, int complexity) {
+    private void doMining(String previousHash, List<Transaction> transactions) {
         log.info("Miner {} started mining for {} transactions", minerWallet.getAddress(), transactions.size());
         List<Transaction> blockTransactions = rebuildTransactions(transactions);
         if (blockInMining != null) {
             blockInMining.stopMining();
         }
-        blockInMining = new Block(previousHash, blockTransactions, complexity);
+        blockInMining = new Block(previousHash, blockTransactions, blockChain.challengeComplexity());
         blockInMining.mineBlock();
         if (blockInMining.challengeSolved()) {
             log.info("Good news! Miner {} solved the challenge for block {} ", minerWallet.getAddress(), blockInMining);
             blockPublisher.publishPotentialBlock(blockInMining);
         } else {
             // retry after shuffling transactions
-            doMining(blockInMining.getPreviousHash(), transactions, complexity);
+            doMining(blockInMining.getPreviousHash(), transactions);
         }
     }
 

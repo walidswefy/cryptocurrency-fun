@@ -1,4 +1,4 @@
-package com.example.blockchain.bitcoin.pubsub;
+package com.example.blockchain.bitcoin.distributed;
 
 import com.example.blockchain.bitcoin.model.Transaction;
 import com.hazelcast.core.HazelcastInstance;

@@ -1,10 +1,8 @@
 package com.example.blockchain.bitcoin.security;
 
 import com.example.blockchain.bitcoin.model.Transaction;
-import com.example.blockchain.bitcoin.pubsub.TransactionPublisher;
+import com.example.blockchain.bitcoin.distributed.TransactionPublisher;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 /**
  * @author walid.sewaify

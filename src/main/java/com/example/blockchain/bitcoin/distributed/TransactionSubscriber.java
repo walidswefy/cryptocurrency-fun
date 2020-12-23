@@ -1,7 +1,7 @@
-package com.example.blockchain.bitcoin.pubsub;
+package com.example.blockchain.bitcoin.distributed;
 
-import com.example.blockchain.bitcoin.security.Miner;
 import com.example.blockchain.bitcoin.model.Transaction;
+import com.example.blockchain.bitcoin.security.Miner;
 import com.example.blockchain.bitcoin.stats.NetworkPerformance;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.topic.ITopic;

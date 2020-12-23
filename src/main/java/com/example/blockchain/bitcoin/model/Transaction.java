@@ -1,10 +1,7 @@
 package com.example.blockchain.bitcoin.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hazelcast.internal.util.JsonUtil;
 import lombok.Builder;
 import lombok.Data;
-import lombok.SneakyThrows;
 
 import java.io.Serializable;
 import java.security.PublicKey;
@@ -32,10 +29,5 @@ public class Transaction implements Serializable {
             ", amount=" + amount +
             ", timestamp=" + timestamp +
             '}';
-    }
-
-    @SneakyThrows
-    public String asJson() {
-        return new ObjectMapper().writeValueAsString(this);
     }
 }
