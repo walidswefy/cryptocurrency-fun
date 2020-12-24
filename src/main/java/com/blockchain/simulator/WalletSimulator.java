@@ -1,6 +1,7 @@
 package com.blockchain.simulator;
 
 import com.blockchain.core.Wallet;
+import com.blockchain.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -44,7 +45,7 @@ public class WalletSimulator {
 
         long amount = random.nextInt(1000000);
         walletBalance.merge(receiverAddress, amount, Long::sum);
-        wallet.sendMoney(receiverAddress, amount);
-        log.info("Receivers balances: {}", walletBalance);
+        Transaction transaction = wallet.sendMoney(receiverAddress, amount);
+        log.info("After transaction {} -> Receivers balances: {}", transaction.getHash(), walletBalance);
     }
 }

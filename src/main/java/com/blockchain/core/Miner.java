@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.blockchain.security.IntegrityChecker.hashPrefix;
 import static com.blockchain.security.IntegrityChecker.verifyTransaction;
 import static java.util.concurrent.CompletableFuture.runAsync;
 
@@ -28,6 +29,9 @@ import static java.util.concurrent.CompletableFuture.runAsync;
 @Profile("miner")
 @Slf4j
 public class Miner {
+    /**
+     * Bitcoin block reward halves every 4 years
+     */
     private static final int BLOCK_REWARD = 1000000;
     private static final int TX_REWARD = 1000;
 
@@ -43,7 +47,7 @@ public class Miner {
     public void mineGenesis() {
         // add genesis block in chain is empty (historical moment!)
         if (blockChain.getBlockChain().isEmpty()) {
-            runAsync(() -> doMining("00000"));
+            doMiningAsync(hashPrefix(64));
         }
     }
 
@@ -56,13 +60,13 @@ public class Miner {
         if (verifyTransaction(transaction)) {
             transactions.add(transaction);
             if (blockInMining != null) {
-                runAsync(() -> doMining(blockInMining.getPreviousHash()));
+                doMiningAsync(blockInMining.getPreviousHash());
             }
         }
     }
 
     /**
-     * reset the mining incase a new block is added to the chain
+     * reset the mining in case a new block is added to the chain
      */
     public void onConfirmedBlock(Block block) {
         log.info("miner {} received block: {}", minerWallet.getAddress(), block);
@@ -72,27 +76,29 @@ public class Miner {
         transactions = transactions.stream().filter(t -> !confirmedTransactions.contains(t.getSignature()))
             .collect(Collectors.toList());
 
-        runAsync(() -> doMining(block.getHash()));
+        doMiningAsync(block.getHash());
     }
 
     /**
      * Try to solve the challenge, and in case of failure restructure the transaction and try again
      */
-    private void doMining(String previousHash) {
-        log.info("Miner {} started mining for {} transactions", minerWallet.getAddress(), transactions.size());
-        List<Transaction> blockTransactions = rebuildTransactions(transactions);
-        if (blockInMining != null) {
-            blockInMining.stopMining();
-        }
-        blockInMining = new Block(previousHash, blockTransactions, blockChain.challengeComplexity());
-        blockInMining.mineBlock();
-        if (blockInMining.challengeSolved()) {
-            log.info("Good news! Miner {} solved the challenge for block {} ", minerWallet.getAddress(), blockInMining);
-            blockPublisher.publishPotentialBlock(blockInMining);
-        } else {
-            // retry after shuffling transactions
-            doMining(blockInMining.getPreviousHash());
-        }
+    private void doMiningAsync(String previousHash) {
+        runAsync(() -> {
+            log.info("Miner {} started mining for {} transactions", minerWallet.getAddress(), transactions.size());
+            List<Transaction> blockTransactions = rebuildTransactions(transactions);
+            if (blockInMining != null) {
+                blockInMining.stopMining();
+            }
+            blockInMining = new Block(previousHash, blockTransactions, blockChain.challengeComplexity());
+            blockInMining.mineBlock();
+            if (blockInMining.challengeSolved()) {
+                log.info("Good news! Miner {} solved the challenge for block {} ", minerWallet.getAddress(), blockInMining);
+                blockPublisher.publishPotentialBlock(blockInMining);
+            } else {
+                // retry after shuffling transactions
+                doMiningAsync(blockInMining.getPreviousHash());
+            }
+        });
     }
 
     /**

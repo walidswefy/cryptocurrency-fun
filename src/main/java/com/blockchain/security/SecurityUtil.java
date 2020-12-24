@@ -14,7 +14,7 @@ import java.util.Base64;
  * @author walid.sewaify
  * @since 19-Dec-20
  */
-public abstract class HashUtil {
+public abstract class SecurityUtil {
     @SneakyThrows
     public static String getHash(byte[] data) {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

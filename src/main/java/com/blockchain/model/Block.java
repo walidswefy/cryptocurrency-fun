@@ -6,6 +6,8 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.blockchain.security.IntegrityChecker.hashPrefix;
+
 /**
  * @author walid.sewaify
  * @since 01-Dec-20
@@ -22,7 +24,7 @@ public class Block implements Serializable {
     private boolean doMining;
 
     public Block(String previousHash, List<Transaction> transactions, int complexity) {
-        this.prefixString = new String(new char[complexity]).replace('\0', '0');
+        this.prefixString = hashPrefix(complexity);
         this.previousHash = previousHash;
         this.transactions = transactions;
         this.complexity = complexity;

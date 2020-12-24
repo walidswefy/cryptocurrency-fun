@@ -17,7 +17,7 @@ public class IntegrityChecker {
      */
     public static boolean verifyTransaction(Transaction transaction) {
         try {
-            String decryptedTransaction = HashUtil.decryptText(transaction.getSignature(), transaction.getSenderKey());
+            String decryptedTransaction = SecurityUtil.decryptText(transaction.getSignature(), transaction.getSenderKey());
             String[] transactionData = decryptedTransaction.split(":");
             String timestamp = transactionData[0];
             String amount = transactionData[1];
@@ -32,13 +32,16 @@ public class IntegrityChecker {
         }
     }
 
+    /**
+     * Verify block sequence, transactions and challenge
+     */
     public static boolean verifyBlock(String lastBlockHash, int complexity, Block block) {
         boolean validSequence = lastBlockHash == null || lastBlockHash.equals(block.getPreviousHash());
         if (!validSequence) {
             return false;
         }
 
-        String prefix = new String(new char[complexity]).replace('\0', '0');
+        String prefix = hashPrefix(complexity);
         boolean validHash = calculateBlockHash(block).startsWith(prefix);
         if (!validHash) {
             return false;
@@ -62,6 +65,10 @@ public class IntegrityChecker {
             block.getTimeStamp() + ":" +
             block.getNonce() + ":" +
             txs;
-        return HashUtil.getHash(content.getBytes());
+        return SecurityUtil.getHash(content.getBytes());
+    }
+
+    public static String hashPrefix(int complexity) {
+        return new String(new char[complexity]).replace('\0', '0');
     }
 }

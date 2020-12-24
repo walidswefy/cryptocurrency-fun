@@ -25,7 +25,7 @@ public class BlockVoting {
     private final HazelcastInstance instance;
 
     /**
-     * Master node will ask all network members to verify the block based on the majority of votes
+     * Master node will ask all network members to verify the block and decide based on the majority of votes
      */
     @SneakyThrows
     public boolean majorityVotes(String lastBlockHash, int complexity, Block block) {

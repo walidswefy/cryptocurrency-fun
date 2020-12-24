@@ -17,6 +17,8 @@ import java.util.Map;
 /**
  * @author walid.sewaify
  * @since 22-Dec-20
+ * <p>
+ * Statistics and measures to network performance
  */
 @Component
 @Data
