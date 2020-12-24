@@ -1,6 +1,6 @@
-package com.example.blockchain.bitcoin.distributed;
+package com.blockchain.distributed;
 
-import com.example.blockchain.bitcoin.model.Block;
+import com.blockchain.model.Block;
 import com.hazelcast.core.HazelcastInstance;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -24,6 +24,9 @@ public class DistributedChain {
     private final BlockPublisher blockPublisher;
     private final BlockVoting voting;
 
+    /**
+     * Distributed list of blocks (replicated across network)
+     */
     public List<Block> getBlockChain() {
         return instance.getList("blockchain");
     }
@@ -33,8 +36,11 @@ public class DistributedChain {
         return blockChain.isEmpty() ? Optional.empty() : Optional.of(blockChain.get(blockChain.size() - 1));
     }
 
+    /**
+     * Fixed value for testing purpose, in reality Bitcoin re-calculates the complexity
+     * based on the times needed to mine the latest 2016 blocks (average is two weeks)
+     */
     public int challengeComplexity() {
-        // should be based on latest blocks mining effort
         return 4;
     }
 
@@ -47,7 +53,6 @@ public class DistributedChain {
             blockPublisher.publishConfirmedBlock(block);
         }
     }
-
 
     public boolean isMasterNode() {
         return instance.getCluster().getMembers().iterator().next().localMember();

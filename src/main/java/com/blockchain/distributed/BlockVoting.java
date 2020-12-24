@@ -1,6 +1,6 @@
-package com.example.blockchain.bitcoin.distributed;
+package com.blockchain.distributed;
 
-import com.example.blockchain.bitcoin.model.Block;
+import com.blockchain.model.Block;
 import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IExecutorService;
@@ -24,6 +24,9 @@ import java.util.concurrent.Future;
 public class BlockVoting {
     private final HazelcastInstance instance;
 
+    /**
+     * Master node will ask all network members to verify the block based on the majority of votes
+     */
     @SneakyThrows
     public boolean majorityVotes(String lastBlockHash, int complexity, Block block) {
         log.info("checking if block is accepted by majority of workers: {}", block.getHash());

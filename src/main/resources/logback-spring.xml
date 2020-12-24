@@ -8,7 +8,7 @@
     <property name="MAX_HISTORY" value="30"/>
     <property name="MAX_FILE_SIZE" value="100MB"/>
 
-    <logger name="com.example.blockchain.bitcoin" level="INFO"/>
+    <logger name="com.blockchain" level="INFO"/>
 
     <springProfile name="elk">
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

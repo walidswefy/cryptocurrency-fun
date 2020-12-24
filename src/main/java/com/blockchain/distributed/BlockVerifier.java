@@ -1,12 +1,11 @@
-package com.example.blockchain.bitcoin.distributed;
+package com.blockchain.distributed;
 
-import com.example.blockchain.bitcoin.model.Block;
+import com.blockchain.model.Block;
+import com.blockchain.security.IntegrityChecker;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;
-
-import static com.example.blockchain.bitcoin.security.IntegrityChecker.verifyBlock;
 
 /**
  * @author walid.sewaify
@@ -20,6 +19,6 @@ public class BlockVerifier implements Callable<Boolean>, Serializable {
 
     @Override
     public Boolean call() throws Exception {
-        return verifyBlock(lastBlockHash, currentComplexity, block);
+        return IntegrityChecker.verifyBlock(lastBlockHash, currentComplexity, block);
     }
 }

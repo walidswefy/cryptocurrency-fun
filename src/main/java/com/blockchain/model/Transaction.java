@@ -1,7 +1,8 @@
-package com.example.blockchain.bitcoin.model;
+package com.blockchain.model;
 
 import lombok.Builder;
 import lombok.Data;
+import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.security.PublicKey;
@@ -13,13 +14,18 @@ import java.security.PublicKey;
 @Data
 @Builder
 public class Transaction implements Serializable {
-    private boolean coinbase;
+    private final boolean coinbase;
     private String sender;
     private String receiver;
     private PublicKey senderKey;
     private long amount;
     private long timestamp;
     private String signature;
+    private String hash;
+
+    public boolean isCoinbase() {
+        return StringUtils.isEmpty(sender);
+    }
 
     @Override
     public String toString() {
@@ -27,6 +33,7 @@ public class Transaction implements Serializable {
             "sender='" + sender + '\'' +
             ", receiver='" + receiver + '\'' +
             ", amount=" + amount +
+            ", hash=" + hash +
             ", timestamp=" + timestamp +
             '}';
     }

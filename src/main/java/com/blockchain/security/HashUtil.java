@@ -1,4 +1,4 @@
-package com.example.blockchain.bitcoin.security;
+package com.blockchain.security;
 
 import lombok.SneakyThrows;
 

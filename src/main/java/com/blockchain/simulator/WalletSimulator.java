@@ -1,6 +1,6 @@
-package com.example.blockchain.bitcoin.simulator;
+package com.blockchain.simulator;
 
-import com.example.blockchain.bitcoin.security.Wallet;
+import com.blockchain.core.Wallet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -19,6 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 public class WalletSimulator {
+    // infinite balance wallet!
     private final Wallet wallet;
     private final Map<String, Long> walletBalance = new HashMap<>();
     private List<Wallet> receivers;
@@ -36,6 +37,7 @@ public class WalletSimulator {
 
     @Scheduled(fixedDelay = 5000)
     public void simulate() {
+        // keeping sending random amount from main wallet to a random receiver wallet
         Random random = new Random();
         int randomReceiver = random.nextInt(receivers.size());
         String receiverAddress = receivers.get(randomReceiver).getAddress();
@@ -43,6 +45,6 @@ public class WalletSimulator {
         long amount = random.nextInt(1000000);
         walletBalance.merge(receiverAddress, amount, Long::sum);
         wallet.sendMoney(receiverAddress, amount);
-        log.info("balances: {}", walletBalance);
+        log.info("Receivers balances: {}", walletBalance);
     }
 }

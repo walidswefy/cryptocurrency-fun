@@ -1,9 +1,10 @@
-package com.example.blockchain.bitcoin.security;
+package com.blockchain.security;
 
-import com.example.blockchain.bitcoin.model.Block;
-import com.example.blockchain.bitcoin.model.Transaction;
+import com.blockchain.model.Block;
+import com.blockchain.model.Transaction;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author walid.sewaify
@@ -11,21 +12,21 @@ import java.util.List;
  */
 public class IntegrityChecker {
 
+    /**
+     * Verify transaction data and signature
+     */
     public static boolean verifyTransaction(Transaction transaction) {
         try {
             String decryptedTransaction = HashUtil.decryptText(transaction.getSignature(), transaction.getSenderKey());
             String[] transactionData = decryptedTransaction.split(":");
             String timestamp = transactionData[0];
             String amount = transactionData[1];
-            String sender = transaction.isCoinbase() ? null : transactionData[2];
-            String receiver = transaction.isCoinbase() ? transactionData[2] : transactionData[3];
-            boolean validData = Long.toString(transaction.getTimestamp()).equals(timestamp)
+            String sender = transactionData[2];
+            String receiver = transactionData[3];
+            return Long.toString(transaction.getTimestamp()).equals(timestamp)
                 && Long.toString(transaction.getAmount()).equals(amount)
-                && receiver.equals(transaction.getReceiver());
-            if (transaction.isCoinbase()) {
-                return validData;
-            }
-            return validData && transaction.getSender().equals(sender);
+                && receiver.equals(transaction.getReceiver())
+                && transaction.getSender().equals(sender);
         } catch (SecurityException e) {
             return false;
         }
@@ -54,7 +55,13 @@ public class IntegrityChecker {
     }
 
     public static String calculateBlockHash(Block block) {
-        String dataToHash = block.getPreviousHash() + block.getTimeStamp() + block.getNonce() + block.getTransactions();
-        return HashUtil.getHash(dataToHash.getBytes());
+        String txs = block.getTransactions().stream().map(Transaction::getHash)
+            .collect(Collectors.joining(":"));
+
+        String content = block.getPreviousHash() + ":" +
+            block.getTimeStamp() + ":" +
+            block.getNonce() + ":" +
+            txs;
+        return HashUtil.getHash(content.getBytes());
     }
 }

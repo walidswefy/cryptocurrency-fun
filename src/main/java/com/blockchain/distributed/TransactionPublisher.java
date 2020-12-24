@@ -1,6 +1,6 @@
-package com.example.blockchain.bitcoin.distributed;
+package com.blockchain.distributed;
 
-import com.example.blockchain.bitcoin.model.Transaction;
+import com.blockchain.model.Transaction;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.topic.ITopic;
 import lombok.AllArgsConstructor;

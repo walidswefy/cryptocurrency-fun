@@ -1,11 +1,10 @@
-package com.example.blockchain.bitcoin.model;
+package com.blockchain.model;
 
+import com.blockchain.security.IntegrityChecker;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static com.example.blockchain.bitcoin.security.IntegrityChecker.calculateBlockHash;
 
 /**
  * @author walid.sewaify
@@ -32,11 +31,11 @@ public class Block implements Serializable {
     public void mineBlock() {
         doMining = true;
         timeStamp = System.currentTimeMillis();
-        hash = calculateBlockHash(this);
+        hash = IntegrityChecker.calculateBlockHash(this);
         while (doMining && !challengeSolved()) {
             timeStamp = System.currentTimeMillis();
             nonce++;
-            hash = calculateBlockHash(this);
+            hash = IntegrityChecker.calculateBlockHash(this);
         }
     }
 

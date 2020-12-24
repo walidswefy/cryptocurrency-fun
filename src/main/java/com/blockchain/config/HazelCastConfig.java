@@ -1,4 +1,4 @@
-package com.example.blockchain.bitcoin.config;
+package com.blockchain.config;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
