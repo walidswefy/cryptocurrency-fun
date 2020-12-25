@@ -1,12 +1,15 @@
 package com.blockchain.model;
 
 import com.blockchain.security.IntegrityChecker;
+import com.blockchain.security.SecurityUtil;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.blockchain.security.IntegrityChecker.hashPrefix;
+import static com.blockchain.security.SecurityUtil.merkleRoot;
 
 /**
  * @author walid.sewaify
@@ -18,6 +21,7 @@ public class Block implements Serializable {
     private final String previousHash;
     private final int complexity;
     private final List<Transaction> transactions;
+    private final String merkleRoot;
     private long timeStamp;
     private String hash;
     private int nonce;
@@ -27,6 +31,7 @@ public class Block implements Serializable {
         this.prefixString = hashPrefix(complexity);
         this.previousHash = previousHash;
         this.transactions = transactions;
+        this.merkleRoot = merkleRoot(transactions.stream().map(Transaction::getHash).collect(Collectors.toList()));
         this.complexity = complexity;
     }
 

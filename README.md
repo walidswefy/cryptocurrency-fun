@@ -28,6 +28,7 @@ The implementation is meant to give a better understanding of how crytocurrencie
 * Distributed list manages the public block chain. Blocks are replicated between nodes.
 * For simplicity, award amounts are fixed, and wallets have an infinite balances!
 * Wallet addresses are encoded in hexadecimal, whereas Bitcoin uses Base58 for that.
+* Hashing done on concatenated block data, whereas Bitcoin uses Merkle tree for Simple Payment Verification (SPV). 
  
 ## Technology Stack
 

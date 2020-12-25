@@ -33,7 +33,7 @@ public class Wallet {
             keyGen.initialize(2048);
             this.pair = keyGen.generateKeyPair();
             // address in bitcoin in Base58, for this we use hexadecimal encoding
-            this.address = SecurityUtil.getHash(getPublicKey().getEncoded());
+            this.address = SecurityUtil.hash(getPublicKey().getEncoded());
         } catch (NoSuchAlgorithmException e) {
             throw new SecurityException("RSA is not supported!", e);
         }
@@ -46,7 +46,7 @@ public class Wallet {
         long time = System.currentTimeMillis();
         String transactionAsText = String.format("%s:%s:%s:%s", time, amount, sender, receiver);
         String signature = signTransaction(transactionAsText);
-        String signatureHash = SecurityUtil.getHash(signature.getBytes());
+        String signatureHash = SecurityUtil.hash(signature.getBytes());
         return Transaction.builder().sender(sender).receiver(receiver).amount(amount).timestamp(time)
             .senderKey(getPublicKey()).signature(signature).hash(signatureHash).build();
     }

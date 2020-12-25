@@ -65,7 +65,7 @@ public class IntegrityChecker {
             block.getTimeStamp() + ":" +
             block.getNonce() + ":" +
             txs;
-        return SecurityUtil.getHash(content.getBytes());
+        return SecurityUtil.hash(content.getBytes());
     }
 
     public static String hashPrefix(int complexity) {
