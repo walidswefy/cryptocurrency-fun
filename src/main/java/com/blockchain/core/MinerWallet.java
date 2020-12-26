@@ -15,6 +15,7 @@ public class MinerWallet extends Wallet {
     }
 
     public Transaction coinBase(long awardAmount) {
+        // sender assumed empty for coinbase transaction
         return createTransaction("", getAddress(), awardAmount);
     }
 }

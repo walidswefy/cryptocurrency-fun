@@ -4,7 +4,6 @@ import com.blockchain.model.Block;
 import com.blockchain.model.Transaction;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author walid.sewaify
@@ -12,11 +11,15 @@ import java.util.stream.Collectors;
  */
 public class IntegrityChecker {
 
+    private IntegrityChecker() {
+    }
+
     /**
      * Verify transaction data and signature
      */
     public static boolean verifyTransaction(Transaction transaction) {
         try {
+            // TODO verify sender has enough balance!
             String decryptedTransaction = SecurityUtil.decryptText(transaction.getSignature(), transaction.getSenderKey());
             String[] transactionData = decryptedTransaction.split(":");
             String timestamp = transactionData[0];
@@ -58,13 +61,11 @@ public class IntegrityChecker {
     }
 
     public static String calculateBlockHash(Block block) {
-        String txs = block.getTransactions().stream().map(Transaction::getHash)
-            .collect(Collectors.joining(":"));
 
         String content = block.getPreviousHash() + ":" +
             block.getTimeStamp() + ":" +
             block.getNonce() + ":" +
-            txs;
+            block.getMerkleRoot();
         return SecurityUtil.hash(content.getBytes());
     }
 

@@ -47,7 +47,7 @@ public class DistributedChain {
     @SneakyThrows
     public void onPotentialBlock(Block block) {
         log.info("received potential block: {}", block.getHash());
-        String lastBlockHash = lastBlock().isEmpty() ? null : lastBlock().get().getHash();
+        String lastBlockHash = lastBlock().isPresent() ? lastBlock().get().getHash() : null;
         if (isMasterNode() && voting.majorityVotes(lastBlockHash, challengeComplexity(), block)) {
             getBlockChain().add(block);
             blockPublisher.publishConfirmedBlock(block);

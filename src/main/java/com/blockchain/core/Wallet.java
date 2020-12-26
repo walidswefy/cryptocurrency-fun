@@ -32,7 +32,7 @@ public class Wallet {
             keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048);
             this.pair = keyGen.generateKeyPair();
-            // address in bitcoin in Base58, for this we use hexadecimal encoding
+            // address in bitcoin in Base58, here we use hexadecimal encoding
             this.address = SecurityUtil.hash(getPublicKey().getEncoded());
         } catch (NoSuchAlgorithmException e) {
             throw new SecurityException("RSA is not supported!", e);

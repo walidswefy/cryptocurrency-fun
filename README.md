@@ -70,6 +70,10 @@ build docker image:
 mvn com.google.cloud.tools:jib-maven-plugin:2.4.0:dockerBuild
 ```
 
+run miner and wallet applications using docker compose
+
+docker-compose -f app.yml up -d
+
 ### application profiles
 
 * **default**: thin client (wallet)

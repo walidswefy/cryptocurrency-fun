@@ -84,7 +84,7 @@ public class Miner {
      */
     private void doMiningAsync(String previousHash) {
         runAsync(() -> {
-            log.info("Miner {} started mining for {} transactions", minerWallet.getAddress(), transactions.size());
+            log.debug("Miner {} started mining for {} transactions", minerWallet.getAddress(), transactions.size());
             List<Transaction> blockTransactions = rebuildTransactions(transactions);
             if (blockInMining != null) {
                 blockInMining.stopMining();

@@ -41,7 +41,7 @@ public class BlockVoting {
                 votes--;
             }
         }
-        log.info("Network receives {} votes to add block {}", votes, block.getComplexity());
+        log.info("Network receives {} votes to add block {}", votes, block.getHash());
         return votes > 0;
     }
 

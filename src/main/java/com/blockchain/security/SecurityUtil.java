@@ -9,29 +9,19 @@ import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author walid.sewaify
  * @since 19-Dec-20
  */
 public abstract class SecurityUtil {
-    @SneakyThrows
-    public static String hash(byte[] data) {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] bytes = digest.digest(data);
-        StringBuilder buffer = new StringBuilder();
-        for (byte b : bytes) {
-            buffer.append(String.format("%02x", b));
-        }
-        return buffer.toString();
+    private SecurityUtil() {
     }
 
     /**
-     * Calculate transactions hash root as a master hash of hash tree
+     * Calculate transactions hash root as the master hash of hash tree
      */
     public static String merkleRoot(List<String> hashes) {
         if (hashes == null || hashes.isEmpty()) throw new IllegalArgumentException();
@@ -45,7 +35,7 @@ public abstract class SecurityUtil {
                 reducedList.add(hash((hashes.get(i) + hashes.get(i + 1)).getBytes()));
             }
         }
-
+        // recursively process hash tree levels
         return merkleRoot(reducedList);
     }
 
@@ -71,5 +61,16 @@ public abstract class SecurityUtil {
 
     private static Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException {
         return Cipher.getInstance("RSA");
+    }
+
+    @SneakyThrows
+    public static String hash(byte[] data) {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] bytes = digest.digest(data);
+        StringBuilder buffer = new StringBuilder();
+        for (byte b : bytes) {
+            buffer.append(String.format("%02x", b));
+        }
+        return buffer.toString();
     }
 }

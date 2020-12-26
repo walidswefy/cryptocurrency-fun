@@ -1,14 +1,11 @@
 version: '2'
 services:
-  service-mainapp:
-    container_name: ${APP_NAME}-main
+  service-miner:
+    container_name: ${APP_NAME}-miner
     image: ${APP_IMAGE}
-    ports:
-      - '${APP_PORT}:${CONTAINER_PORT}'
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,swagger,elk
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_PROFILES_ACTIVE=miner,elk
     labels:
       # Register container to filebeat via autodiscovery
       - co.elastic.metrics/hosts='elasticsearch:9200'
@@ -16,5 +13,22 @@ services:
       - co.elastic.logs/json.add_error_key=true
       - co.elastic.logs/json.message_key=message
       - co.elastic.metrics/metricsets=status
+
+  service-wallet:
+    container_name: ${APP_NAME}-wallet
+    image: ${APP_IMAGE}
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=elk
+    depends_on:
+      - service-miner
+    labels:
+      # Register container to filebeat via autodiscovery
+      - co.elastic.metrics/hosts='elasticsearch:9200'
+      - co.elastic.logs/json.keys_under_root=true
+      - co.elastic.logs/json.add_error_key=true
+      - co.elastic.logs/json.message_key=message
+      - co.elastic.metrics/metricsets=status
+
 
 

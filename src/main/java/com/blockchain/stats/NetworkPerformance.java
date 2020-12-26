@@ -18,7 +18,7 @@ import java.util.Map;
  * @author walid.sewaify
  * @since 22-Dec-20
  * <p>
- * Statistics and measures to network performance
+ * Statistics to measure to network performance
  */
 @Component
 @Data
@@ -76,6 +76,8 @@ public class NetworkPerformance {
     public void reportPerformance() {
         log.info(this.toString());
         List<Block> blocks = blockChain.getBlockChain();
-        blocks.stream().map(Block::toString).forEach(log::info);
+        if (log.isDebugEnabled()) {
+            blocks.stream().map(Block::toString).forEach(log::debug);
+        }
     }
 }

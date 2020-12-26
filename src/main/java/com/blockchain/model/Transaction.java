@@ -2,10 +2,11 @@ package com.blockchain.model;
 
 import lombok.Builder;
 import lombok.Data;
-import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.security.PublicKey;
+
+import static net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * @author walid.sewaify
@@ -24,7 +25,7 @@ public class Transaction implements Serializable {
     private String hash;
 
     public boolean isCoinbase() {
-        return StringUtils.isEmpty(sender);
+        return isEmpty(sender);
     }
 
     @Override

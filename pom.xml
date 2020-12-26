@@ -9,18 +9,18 @@
         <relativePath/>
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>bitcoin-simulator</artifactId>
+    <artifactId>cryptofun</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bitcoin-simulator</name>
-    <description>Simple simulator for bitcoin and blockchain</description>
+    <name>cryptofun</name>
+    <description>Simulator for distributed cryptocurrencies and blockchain</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
         <jib-maven-plugin.version>2.4.0</jib-maven-plugin.version>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
 
-        <docker.image.name>docservice</docker.image.name>
+        <docker.image.name>cryptofun</docker.image.name>
         <test.results.directory>${project.build.directory}/test-results</test.results.directory>
         <junit.itReportFolder>${test.results.directory}/integrationTest</junit.itReportFolder>
         <junit.utReportFolder>${test.results.directory}/test</junit.utReportFolder>
