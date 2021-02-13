@@ -3,9 +3,9 @@ Cryptocurrency for fun!
 
 ## What is that?
 
-A simulation to a decentralized cryptocurrency built using blockchain technology, where transactions are securely stored in a distributed ledger.
+A simulation to a decentralized cryptocurrency system built using blockchain technology where transactions are securely stored in a distributed ledger.
 
-The implementation is meant to give a better understanding of how crytocurrencies work in practise. Individual miners are racing to solve a cryptographic challenge and get rewards for that (fun run!), and the network of miners employs a consensus mechanism (proof-of-work) to prevent the double spend problem.
+The implementation is meant to give a better understanding of how crytocurrencies work in practise. Individual miners are racing to solve a cryptographic challenge and get rewards for that, and the network of miners employs a consensus mechanism (proof-of-work) to prevent the double spend problem.
  
 ## Comparing to Bitcoin
 
@@ -26,7 +26,7 @@ The implementation is meant to give a better understanding of how crytocurrencie
 * Unconfirmed transactions, potential and confirmed blocks propagate to all miners using distributed publish-subscribe model.
 * The master node manages a voting between all miners to confirm the block.
 * Distributed list manages the public block chain. Blocks are replicated between nodes.
-* For simplicity, award amounts are fixed, and wallets have an infinite balances!
+* For simplicity, award amounts are fixed, and wallets have infinite balances!
 * Wallet addresses are encoded in hexadecimal, whereas Bitcoin uses Base58 for that.
  
 ## Technology Stack
@@ -43,8 +43,15 @@ The implementation is meant to give a better understanding of how crytocurrencie
   [development] 
 - `docker`, `docker-compose`
   [containers]
+  
+# Quick run
 
-## How to run
+```bash
+docker container run --name miner -e "SPRING_PROFILES_ACTIVE=miner" walidswefy/cryptofun
+docker container run --name wallet walidswefy/cryptofun
+```
+
+## How to run code
 
 - compile code:
 
